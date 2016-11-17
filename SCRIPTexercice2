@@ -1,0 +1,52 @@
+Create table MAGASIN (NUMMAGASIN decimal (8) not null,
+					 PRODUIT char (30) not null,
+					 LOCALISATION char (30) not null,
+					 NUMCLIENT decimal (8) not null,
+					 NUMPRODUIT decimal (8) not null,
+				Primary key (NUMMAGASIN)
+				Foreign key (NUMCLIENT) references CLIENT
+					on delete no action on update cascade,
+				Foreign key (NUMPRODUIT) references PRODUIT,
+					on delete no action on update cascade)
+				In SP_MAGASIN;
+
+Create table CLIENT (NUMCLIENT decimal (8) not null,
+					 NOM char (20) not null,
+					 PRENOM char (20) not null,
+					 ADRESSE char (20) not null,
+					 NUMCOMMANDE decimal (8) not null,
+				Primary key (NUMCLIENT),
+				Foreign key (NUMCOMMANDE) references COMMANDE,
+					on delete no action on update cascade)
+				In SP_COMMANDE;
+
+Create table COMMANDE (NUMCOMMANDE decimal (8) not null,
+					   DATECOM date not null,
+					   ADRESSELIV char (30) not null,
+					   QUANTITE decimal (4) not null,
+					   NUMPRODUIT decimal (8) not null,
+					   NUMCLIENT decimal (8) not null,
+				Primary key (NUMCOMMANDE),
+				Foreign key (NUMPRODUIT) references PRODUIT,
+					on delete no action on update cascade,
+				Foreign key (NUMCLIENT) references CLIENT,
+					on delete no action on update cascade)
+				In SP_COMMANDE;
+
+Create table PRODUIT (NUMPRODUIT decimal (8) not null,
+						REFERENCE decimal (12) not null,
+						LIBELLE decimal (12) not null,
+						PRIX decimal (10) not null,
+						NUMCOMMANDE decimal (8) not null,
+						NUMMAGASIN decimal (8) not null,
+					Primary key (NUMPRODUIT),
+					Foreign key (NUMCOMMANDE) references COMMANDE,
+						on delete no action on update cascade,
+					Foreign key (NUMMAGASIN) references MAGASIN,
+						on delete no action on update cascade)
+					In SP_MAGASIN;
+
+Create unique index XMAG_NUMMAG on MAGASIN(NUMMAGASIN);
+Create unique index XCLI_NUMCLI on CLIENT(NUMCLIENT);
+Create unique index XPRO_NUMPRO on PRODUIT(NUMPRODUIT);
+Create unique index XCOM_NUMCOM on COMMANDE(NUMCOMMANDE);

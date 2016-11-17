@@ -1,0 +1,48 @@
+Create table BANQUE (NUMBANQUE decimal (8) not null,
+					 NOM char (30) not null,
+					 STOCKAGE char (20) not null,
+				Primary key (NUMBANQUE))
+				In SP_BANQUE;
+
+Create table CLIENT (NUMCLIENT decimal (8) not null,
+					 NOM char (20) not null,
+					 PRENOM char (20) not null,
+					 ADRESSE char (20) not null,
+					 NUMBANQUE decimal (8) not null,
+					 NUMCOMPTE decimal (8) not null,
+				Primary key (NUMCLIENT),
+				Foreign key (NUMBANQUE) references BANQUE,
+					on delete no action on update cascade,
+				Foreign key (NUMCOMPTE) references COMPTE,
+					on delete no action on update cascade)
+				In SP_BANQUE;
+
+Create table COMPTE (NUMCOMPTE decimal (8) not null,
+					 SOLDE decimal (12) not null,
+					 NUMOPERATION decimal (8) not null,
+					 NUMCLIENT decimal (8) not null,
+					 NUMBANQUE decimal (8) not null,
+				Primary key (NUMCOMPTE),
+				Foreign key (NUMOPERATION) references OPERATION,
+					on delete no action on update cascade,
+				Foreign key (NUMCLIENT) references CLIENT,
+					on delete no action on update cascade,
+				Foreign key (NUMBANQUE) references BANQUE,
+					on delete no action on update cascade)
+				In SP_COMPTE;
+
+Create table OPERATION (NUMOPERATION decimal (8) not null,
+						NUMCOMPTE decimal (8) not null,
+						RETRAIT decimal (12) not null,
+						DEPOT decimal (12) not null,
+						DATEOP date not null,
+						MONTANT decimal (16) not null,
+					Primary key (NUMOPERATION),
+					Foreign key (NUMCOMPTE) references COMPTE,
+						on delete no action on update cascade)
+					In SP_COMPTE;
+
+Create unique index XBAN_NUMBAN on BANQUE(NUMBANQUE);
+Create unique index XCLI_NUMCLI on CLIENT(NUMCLIENT);
+Create unique index XCOM_NUMCOM on COMPTE(NUMCOMPTE);
+Create unique index XOPE_NUMOPE on OPERATION(NUMOPERATION);
